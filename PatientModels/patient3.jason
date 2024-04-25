@@ -1,0 +1,12 @@
+{
+    "first_name": "Frank",
+    "last_name": "Goel",
+    "pictureurl": "path/to/patient_picture.jpg",
+    "age": 81,
+    "sex": "male",
+    "relatives": ["Miranda Goel", "Rick Maal", "Mary Goel"],
+    "diagnosis": "Leukemia",
+    "prognosis": "3 months to live",
+    "deathwish": ["To visit the forest with my wife"],
+    "attachment": "path/to/attachment_file.pdf"
+  }
