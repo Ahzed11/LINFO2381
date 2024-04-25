@@ -7,6 +7,11 @@ from pydantic import BaseModel, Field
 class Patient(BaseModel):
     first_name: str
     last_name: str
+    picture: str
+    age: int
+    sex: str
+    condition: str
+    wish: str
 
 app = FastAPI()
 app.add_middleware(
@@ -35,4 +40,4 @@ async def create_patient(patient: Patient):
     patient_as_json = jsonable_encoder(patient)
     key = couchdb_client.addDocument("patients", patient_as_json) 
     new_patient = couchdb_client.getDocument("patients", key)
-    return {"message": f"Hello {new_patient}"}
+    return {"patient": new_patient}
