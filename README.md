@@ -2,7 +2,7 @@
 **Group 11**
 1. Alexandre Zenon - 06041900
 1. Marc Phillipe Marburger - 7759-23-01
-1. TODO
+1. Alejandro Rodriguez Ponce - 24962201
 1. TODO
 
 ## Getting started
