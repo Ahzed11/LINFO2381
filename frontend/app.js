@@ -22,6 +22,20 @@
  * SOFTWARE.
  **/
 
+
+// Logic for the listing patients page (mainpage.html)
+if (window.location.pathname === '/mainpage.html') {
+  // Code specific to the listing patients page
+  // Fetch patients data, display them, handle user interactions, etc.
+}
+
+// Logic for the specific patient page (specificpage.html)
+if (window.location.pathname === '/specificpage.html') {
+  // Code specific to the specific patient page
+  // Fetch data for the specific patient, display it, handle user interactions, etc.
+}
+
+//  below is code from the course
 var chart = null;
 
 
