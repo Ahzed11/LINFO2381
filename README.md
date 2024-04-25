@@ -1,9 +1,9 @@
 # LINFO2381 - Health informatics
 **Group 11**
 1. Alexandre Zenon - 06041900
-1. Marc Phillipe Marburger - 7759-23-01
+1. Marc Phillipe Marburger - 77592301
 1. Alejandro Rodriguez Ponce - 24962201
-1. TODO
+1. Emilie Carels - 29482000
 
 ## Getting started
 ```sh
