@@ -1,0 +1,12 @@
+{
+    "first_name": "Helen",
+    "last_name": "Jonson",
+    "pictureurl": "path/to/patient_picture.jpg",
+    "age": 72,
+    "sex": "female",
+    "relatives": ["Peter Jonson", "Sam Jonson", "Linda Jonson"],
+    "diagnosis": "Colon cancer",
+    "prognosis": "8 months to live",
+    "deathwish": ["To eat spaghetti with meatballs and drink a glass of red wine", "To visit Paris", "To see her grandchildren"],
+    "attachment": "path/to/attachment_file.pdf"
+  }
