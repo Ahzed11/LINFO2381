@@ -9,3 +9,6 @@
 ```sh
 docker compose up
 ```
+
+## Listing the api endpoints
+Navigate to `0.0.0.0/docs` in your browser.
