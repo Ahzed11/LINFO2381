@@ -2,7 +2,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .libs.CouchDBClient import CouchDBClient
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+
+class Relative(BaseModel):
+    first_name: str
+    last_name: str
+    relation: str
+    email: str
+    phone_number: str
 
 class Patient(BaseModel):
     first_name: str
@@ -10,8 +17,10 @@ class Patient(BaseModel):
     picture: str
     age: int
     sex: str
-    condition: str
+    diagnosis: str
+    prognosis: str
     wish: str
+    relatives: list[Relative] = []
 
 app = FastAPI()
 app.add_middleware(

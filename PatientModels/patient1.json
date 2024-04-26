@@ -1,12 +1,13 @@
 {
-    "first_name": "John",
-    "last_name": "Doe",
-    "pictureurl": "path/to/patient_picture.jpg",
-    "age": 45,
-    "sex": "male",
-    "relatives": ["Jane Doe", "Mary Doe"],
-    "diagnosis": "Cancer in brain",
-    "prognosis": "3 months to live",
-    "deathwish": "To pet a dog",
-    "attachment": "path/to/attachment_file.pdf"
-  }
+  "first_name": "John",
+  "last_name": "Doe",
+  "picture": "",
+  "age": 45,
+  "sex": "male",
+  "relatives": [
+    {"first_name": "didier", "last_name": "raoult", "relation": "parent", "email": "dr@gmail.com", "phone_number": "0462283826"}
+  ],
+  "diagnosis": "Cancer in brain",
+  "prognosis": "3 months to live",
+  "wish": "string"
+}
