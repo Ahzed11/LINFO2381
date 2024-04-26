@@ -4,8 +4,11 @@ from .libs.CouchDBClient import CouchDBClient
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 
+#region CONSTANTS
 PATIENTS_DB = "patients"
+#endregion
 
+#region CLASSES
 class Relative(BaseModel):
     first_name: str
     last_name: str
@@ -23,7 +26,9 @@ class Patient(BaseModel):
     prognosis: str
     wish: str
     relatives: list[Relative] = []
+#endregion
 
+#region FASTAPI/COUCHDB SETUP
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -34,14 +39,18 @@ app.add_middleware(
 )
 
 couchdb_client = CouchDBClient(url="http://couchdb:5984")
+#endregion
 
+#region FASTAPI EVENTS
 @app.on_event("startup")
 async def startup_event():
     try:
         couchdb_client.createDatabase(PATIENTS_DB)
     except Exception:
         pass
+#endregion
 
+#region API ENDPOINTS
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -61,3 +70,4 @@ async def create_patient(patient: Patient) -> Patient:
     key = couchdb_client.addDocument(PATIENTS_DB, patient_as_json) 
     new_patient = couchdb_client.getDocument(PATIENTS_DB, key)
     return {"patient": new_patient}
+#endregion
