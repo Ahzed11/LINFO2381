@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Patient</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between; /* Ajuste les éléments uniformément */
+            margin-bottom: 10px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;  /* Assure que chaque form-group prend un espace équivalent */
+            margin-right: 10px; /* Espacement entre les champs */
+        }
+        
+        .form-group:last-child {
+            margin-right: 0; /* Enlève la marge pour le dernier élément dans la row */
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="file"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Patient</h1>
+        <form id="newPatientForm">
+            <div class="row">
+                <div class="form-group">
+                    <label for="first_name">First name:</label>
+                    <input type="text" id="first_name" name="first_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last name:</label>
+                    <input type="text" id="last_name" name="last_name" required>
+                </div>
+            </div>
+            
+
+            <label for="birthdate">Date de Naissance:</label>
+            <input type="date" id="birthdate" name="birthdate" required>
+
+            <label for="sexe">Sexe:</label>
+        <select id="sexe" name="sexe" required>
+            <option value="" disabled selected>Select your sex</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>   
+
+        <label for="photo">Photo:</label>
+        <input type="file" id="photo" name="photo" accept="image/*">
+
+
+            <label for="diagnosis">Diagnosis:</label>
+            <textarea id="diagnosis" name="diagnosis" rows="1" ></textarea>
+
+            <label for="prognosis">Prognosis:</label>
+            <textarea id="prognosis" name="prognosis" rows="1" ></textarea>
+
+            <label for="wish">Wish:</label>
+            <textarea id="wish" name="wish" rows="1" ></textarea>
+
+            <label for="details">Details:</label>
+            <textarea id="details" name="details" rows="2" ></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('newPatientForm').onsubmit = function(event) {
+            event.preventDefault();
+            const formData = {
+                name: document.getElementById('name').value,
+                age: document.getElementById('age').value,
+                details: document.getElementById('details').value
+            };
+            console.log(formData);  // Pour le moment, nous loguons juste les données !!!!!! later, use Axios to send data at the right place 
+
+            // Ici, vous pourriez ajouter un appel AJAX pour envoyer ces données à votre serveur
+            alert('Form submitted! Check console for data. We have to change this to send it to the place with all patients');
+        };
+    </script>
+</body>
+</html>

@@ -1,41 +1,254 @@
 <!DOCTYPE html>
-
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Temperatures in CouchDB</title>
-
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>List of patients</title>
+    <!-- Inclusion de Chart.js et Axios dans le <head> pour qu'ils chargent avant les scripts qui les utilisent -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="app.js"></script>
-  </head>
-  <body>
-    <h1>Temperatures in CouchDB</h1>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 32px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #searchInput {
+            width: 100%;
+            height: 40px;
+            font-size: 18px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%; /* Could be more or less, depending on screen size */
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-    <h2>Create a new patient</h2>
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .button-container button {
+            display: inline-block; /* Affiche les boutons côte à côte */
+            width: 200px; /* Largeur identique pour tous les boutons */
+            height: 40px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 10px; /* Espacement entre les boutons */
+        }
+        
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+        
+        .button-container button:last-child {
+            margin-right: 0; /* Pas de marge à droite du dernier bouton */
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>List of patients</h1>
+        
+        <!-- Barre de recherche toujours accessible sur la page principale -->
+        <input type="text" id="searchInput" placeholder="Search for names" onkeyup="filterPatients()">
+    
+        <div class="button-container">
+            <button id="openFilterModal">Filter Patients</button>
+            <button id="addpatient" onclick="window.location.href='addpatient.html';">Add New Patient</button>
+        </div>
+    
+        <!-- Modal pour les filtres -->
+        <div id="filterModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Filter Patients</h2>
+                <select id="filterSex" onchange="filterPatients()">
+                    <option value="">Any Sex</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+                <input type="number" id="minAge" placeholder="Minimum Age" oninput="filterPatients()">
+                <input type="number" id="maxAge" placeholder="Maximum Age" oninput="filterPatients()">
+                <button onclick="resetFilters()">Reset Filters</button>
 
-    <p id="patient-div">
-      <label for="patient-input">Patient's name:</label>
-      <input type="text" label="patient-input" id="patient-input"></input>
-      <button id="patient-button">Create</button>
-    </p>
-
-    <h2>Temperatures of one patient</h2>
-
-    <p>
-      <label for="patient-select">Choose a patient:</label>
-      <select name="patient-select" id="patient-select">
-      </select>
-    </p>
-
-    <p style="visibility:hidden" id="temperature-div">
-      <label for="temperature-input">Record a temperature:</label>
-      <input type="text" label="temperature-input" id="temperature-input"></input> °C
-      <button id="temperature-button">Add</button>
-    </p>
-
-    <div style="position: relative; height:40vh; width:80vw">
-      <canvas id="temperatures"></canvas>
+            </div>
+        </div>
+        <table id="patientsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Sex</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Les lignes du tableau seront ajoutées par JavaScript -->
+            </tbody>
+        </table>
     </div>
-  </body>
+    
+
+    <script>
+        // Données fictives des patients
+        var patients = [
+        {
+            "first_name": "Jane",
+            "last_name": "Smith",
+            "picture": "profile.jpg",
+            "age": 35,
+            "sex": "female",
+            "relatives": [
+              {"first_name": "David", "last_name": "Smith", "relation": "spouse", "email": "david.smith@example.com", "phone_number": "1234567890"},
+              {"first_name": "Emily", "last_name": "Smith", "relation": "child", "email": "emily.smith@example.com", "phone_number": "9876543210"}
+            ],
+            "diagnosis": "Colon cancer",
+            "prognosis": "8 months",
+            "wish": "To travel the world"
+          },
+          {
+            "first_name": "John",
+            "last_name": "Doe",
+            "picture": "",
+            "age": 45,
+            "sex": "male",
+            "relatives": [
+              {"first_name": "didier", "last_name": "raoult", "relation": "parent", "email": "dr@gmail.com", "phone_number": "0462283826"}
+            ],
+            "diagnosis": "Cancer in brain",
+            "prognosis": "3 months to live",
+            "wish": "string"
+          },
+            {
+                "first_name": "Michael",
+                "last_name": "Johnson",
+                "picture": "profile.png",
+                "age": 55,
+                "sex": "male",
+                "relatives": [
+                  {"first_name": "Sarah", "last_name": "Johnson", "relation": "spouse", "email": "sarah.johnson@example.com", "phone_number": "1234567890"},
+                  {"first_name": "Jacob", "last_name": "Johnson", "relation": "child", "email": "jacob.johnson@example.com", "phone_number": "9876543210"}
+                ],
+                "diagnosis": "Heart cancer",
+                "prognosis": "2 days",
+                "wish": "To spend time with family"
+              }
+        ];
+
+        // Fonction pour charger les patients dans le tableau HTML
+        function loadPatients() {
+            var table = document.getElementById('patientsTable').getElementsByTagName('tbody')[0];
+            patients.forEach(function(patient) {
+                var row = table.insertRow();
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                cell1.textContent = patient.first_name + ' ' + patient.last_name;
+                cell2.textContent = patient.age;
+                cell3.textContent = patient.sex;
+                cell4.innerHTML = '<a href="specificpage.html?patientId=' + patient.id + '">See more</a>';
+            });
+        }
+
+        function filterPatients() {
+            var input = document.getElementById("searchInput");
+            var filter = input.value.toUpperCase();
+            var table = document.getElementById("patientsTable");
+            var tr = table.getElementsByTagName("tr");
+
+            for (var i = 0; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    var txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }       
+            }
+        }
+
+        // Appel de la fonction au chargement de la page
+        window.onload = loadPatients;
+    </script>
+    <script src="app.js"></script>
+</body>
 </html>
