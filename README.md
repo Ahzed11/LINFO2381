@@ -14,4 +14,4 @@ docker compose up
 Navigate to `0.0.0.0/docs` in your browser.
 
 ## Mailbox
-http://0.0.0.0:8025/api/v2/search
+http://0.0.0.0:8025/
