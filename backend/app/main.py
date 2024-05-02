@@ -64,6 +64,12 @@ async def list_patients():
         patients.append(patient)
     return patients
 
+@app.get("/patients/{patient_id}")
+def get_patient(patient_id: str):
+    patient = couchdb_client.getDocument(PATIENTS_DB, patient_id)
+
+    return patient
+
 @app.post("/patients/")
 async def create_patient(patient: Patient):
     patient_as_json = jsonable_encoder(patient)
