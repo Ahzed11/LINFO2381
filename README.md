@@ -12,3 +12,6 @@ docker compose up
 
 ## Listing the api endpoints
 Navigate to `0.0.0.0/docs` in your browser.
+
+## Mailbox
+http://0.0.0.0:8025/api/v2/search

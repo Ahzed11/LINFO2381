@@ -20,6 +20,13 @@ services:
       - couchdb
     ports:
       - "80:80"
+  
+  mailbox:
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - 1025:1025
+      - 8025:8025
 
 volumes:
   couchdata:
