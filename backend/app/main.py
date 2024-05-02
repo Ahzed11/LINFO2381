@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from .libs.CouchDBClient import CouchDBClient
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
+from typing import Optional
+import os
 
 #region CONSTANTS
 PATIENTS_DB = "patients"
@@ -13,8 +15,8 @@ class Relative(BaseModel):
     first_name: str
     last_name: str
     relation: str
-    email: str
-    phone_number: str
+    email: Optional[str] = None
+    phone_number: Optional[str] = None
 
 class Patient(BaseModel):
     first_name: str
