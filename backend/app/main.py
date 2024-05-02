@@ -1,4 +1,8 @@
-from fastapi import FastAPI
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from smtplib import SMTP, SMTPException
+import smtplib
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from .libs.CouchDBClient import CouchDBClient
 from fastapi.encoders import jsonable_encoder
@@ -78,4 +82,38 @@ async def create_patient(patient: Patient):
     key = couchdb_client.addDocument(PATIENTS_DB, patient_as_json) 
     new_patient = couchdb_client.getDocument(PATIENTS_DB, key)
     return  new_patient
+
+
+@app.post("/patients/{patient_id}/notify-relatives")
+async def submit_wish(patient_id: str):
+    patient = couchdb_client.getDocument(PATIENTS_DB, patient_id)
+
+    for relative in patient["relatives"]:
+        email = relative["email"]
+        wish = patient["wish"]
+        result = send_email(email, wish)
+        if result:
+            return {"message": "Wish submitted and email sent successfully."}
+        else:
+            raise HTTPException(status_code=500, detail="Email could not be sent.")
+
+
+def send_email(recipient_email: str, death_wish: str):
+    sender_email = "test"
+
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = recipient_email
+    message['Subject'] = 'Notification of Death Wish Submission'
+
+    message_body = f"Hello,\n This is the wish of your relative: {death_wish} \n Have a nice day !"
+    message.attach(MIMEText(message_body, 'plain'))
+
+    try:
+        with smtplib.SMTP(host="mailbox", port=1025) as smtp:
+            smtp.send_message(message)
+            return True
+    except smtplib.SMTPException as e:
+        print(f"Failed to send email: {e}")
+        return False
 #endregion
