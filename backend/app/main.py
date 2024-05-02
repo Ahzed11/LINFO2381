@@ -56,7 +56,7 @@ async def root():
     return {"message": "Hello World"}
 
 @app.get("/patients/")
-async def list_patients() -> list[Patient]:
+async def list_patients():
     patient_keys = couchdb_client.listDocuments(PATIENTS_DB)
     patients = []
     for key in patient_keys:
@@ -65,7 +65,7 @@ async def list_patients() -> list[Patient]:
     return patients
 
 @app.post("/patients/")
-async def create_patient(patient: Patient) -> Patient:
+async def create_patient(patient: Patient):
     patient_as_json = jsonable_encoder(patient)
     key = couchdb_client.addDocument(PATIENTS_DB, patient_as_json) 
     new_patient = couchdb_client.getDocument(PATIENTS_DB, key)
