@@ -1,41 +1,79 @@
 <!DOCTYPE html>
-
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Temperatures in CouchDB</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Specific Patient View</title>
+  <style> /* This style part of the code is in CSS. */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="app.js"></script>
-  </head>
-  <body>
-    <h1>Temperatures in CouchDB</h1>
+    /* Styles for the container for patient info, placed to the left, with boarder to group meta data*/
+    #patient-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      max-width: 1000px;
+      max-height: 2000px;
+    }
 
-    <h2>Create a new patient</h2>
+    /* Styles for the patient picture, 50% radius makes it round */
+    #patient-picture {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+    }
 
-    <p id="patient-div">
-      <label for="patient-input">Patient's name:</label>
-      <input type="text" label="patient-input" id="patient-input"></input>
-      <button id="patient-button">Create</button>
-    </p>
+    /* Styles for the death wishes container */
+    #deathwishes-container {
+      position: relative; /* Position it relative to its normal position */
+      text-align: left;
+      margin: 200px auto;
+      max-width: 600px;
+      z-index: 2; /* Ensure it's above other elements */
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 44px;
+    }
 
-    <h2>Temperatures of one patient</h2>
+  </style>
+</head>
+<body>
 
-    <p>
-      <label for="patient-select">Choose a patient:</label>
-      <select name="patient-select" id="patient-select">
-      </select>
-    </p>
-
-    <p style="visibility:hidden" id="temperature-div">
-      <label for="temperature-input">Record a temperature:</label>
-      <input type="text" label="temperature-input" id="temperature-input"></input> °C
-      <button id="temperature-button">Add</button>
-    </p>
-
-    <div style="position: relative; height:40vh; width:80vw">
-      <canvas id="temperatures"></canvas>
+  <div id="patient-container">
+    <div class="patient-details">
+      <img id="patient-picture" src="https://voice.ons.org/sites/default/files/2018-12/1000_iStock-481073846.jpg" alt="Patient">
+  
+      <div id="patient-info">
+        <h1 id="first_name">John</h1>
+        <h1 id="last_name">Doe</h1>
+        <h2 id="birthdate">Birthdate: 01/01/1970</h2>
+        <h2 id="age">Age: 50</h2>
+        <h2 id="diagnosis">Diagnosis: Cancer</h2>
+        <h2 id="prognosis">Prognosis: Poor</h2>
+        <h2 id="sex">Sex: Male</h2>
+      </div>
     </div>
-  </body>
+  </div>
+
+  <div id="deathwishes-container">
+      <!-- Header for death wishes -->
+      <h2>Death Wishes</h2>
+      <!-- Unordered list of death wishes denoted ul, with list items called li -->
+      <div id="deathwishes-list">
+        <ul style="list-style-type: disc; text-align: left;  font-size: 22px;">
+          <li>See louvre</li>
+          <li>Write a book</li>
+          <li>Spend time with family</li>
+      </ul>
+      
+
+  <script src="app.js"></script>
+</body>
 </html>

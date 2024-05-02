@@ -124,11 +124,35 @@ function addPatient() {
 if (window.location.pathname === '/specificpage.html') {
   // Code specific to the specific patient page
   // Fetch data for the specific patient, display it, handle user interactions, etc.
+
+  // Select the <ul> element representing the death wish list
+  const deathWishList = document.getElementById('deathwishes');
+
+  // TODO: REPLACE FAKE DATA WITH DATA FROM DB!
+  const deathWishesData = ["Travel to Paris", "Write a letter to grandson", "See family from abroad"];
+
+  // Clear existing death wish list items
+  deathWishList.innerHTML = '';
+
+  // Populate the death wish list with new items
+  deathWishesData.forEach(wish => {const listItem = document.createElement('li');
+  listItem.textContent = wish; 
+  deathWishList.appendChild(listItem);});
+
+  calculateAge(new Date(1990, 1, 1));
+
+
 }
 
 //  below is code from the course
 var chart = null;
 
+// Calculate the age for the specific page from the birthdate and the current date
+function calculateAge(birthdate) {
+  const age = new Date().getFullYear() - birthdate.getFullYear();
+  // Set the age in the HTML (id called age)
+  document.getElementById('age').textContent = age;
+}
 
 function refreshTemperatures() {
   var select = document.getElementById('patient-select');
