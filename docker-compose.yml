@@ -3,6 +3,9 @@ version: "3"
 services:
   couchdb:
     image: couchdb:3.3.3
+    environment:
+      COUCHDB_USER: admin
+      COUCHDB_PASSWORD: password
     volumes:
       - 'couchdata:/var/lib/couchdb/data'
       - './couchdb/local.ini:/opt/couchdb/etc/local.ini'

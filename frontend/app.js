@@ -148,6 +148,18 @@ function calculateAge(birthdate) {
 }
 
 
+document.getElementById('email-button').addEventListener('click', function() {
+  const patientId = new URLSearchParams(window.location.search).get('patientId');
+  axios.post(`http://localhost:80/patients/${patientId}/notify-relatives`), {patientId: patientId}
+    .then(function(response) {
+      alert('Email sent to relative');
+    })
+    .catch(function(response) {
+      alert('No relatives to notify');
+    });
+});
+
+
 
 // End of the code for the specific patient page (specificpage.html)
 // -------------------------------------------------------------------------------------------------------------------
