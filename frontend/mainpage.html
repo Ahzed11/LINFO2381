@@ -117,6 +117,15 @@
             margin-right: 0; /* Pas de marge à droite du dernier bouton */
         }
         
+          /* Style for the logo */
+        #Logo {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 150px; 
+        height: 150px; /* Adjust as needed */
+        border: none;
+  }
         
     </style>
 </head>
@@ -223,7 +232,7 @@
                 cell1.textContent = patient.first_name + ' ' + patient.last_name;
                 cell2.textContent = patient.age;
                 cell3.textContent = patient.sex;
-                cell4.innerHTML = '<a href="specificpage.html?patientId=' + patient.id + '">See more</a>';
+                cell4.innerHTML = '<a href="specificpage.html?patientId=' + patient.id + '">See more</a>'; // 4th cell is the see more link to the specific page
             });
         }
 
@@ -249,6 +258,8 @@
         // Appel de la fonction au chargement de la page
         window.onload = loadPatients;
     </script>
+
+    <img id="Logo" src="..\images\Beyond_Wishes_Logo.png" alt="Logo"> 
     <script src="app.js"></script>
 </body>
 </html>

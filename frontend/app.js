@@ -21,13 +21,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **/
+
+
 // Logic for the listing patients page (mainpage.html)
-if (window.location.pathname === '/mainpage.html') {
-  // Code specific to the listing patients page
-  // Fetch patients data, display them, handle user interactions, etc.
-
-}
-
 var modal = document.getElementById("filterModal");
 var btn = document.getElementById("openFilterModal");
 var span = document.getElementsByClassName("close")[0];
@@ -118,34 +114,31 @@ function addPatient() {
   document.getElementById('newPatientName').value = '';
 }
 
+// End of the code for the listing patients page (mainpage.html)
 //-------------------------------------------------------------------------------------------------------------------
 
 // Logic for the specific patient page (specificpage.html)
-if (window.location.pathname === '/specificpage.html') {
-  // Code specific to the specific patient page
-  // Fetch data for the specific patient, display it, handle user interactions, etc.
-
-  // Select the <ul> element representing the death wish list
-  const deathWishList = document.getElementById('deathwishes');
-
-  // TODO: REPLACE FAKE DATA WITH DATA FROM DB!
-  const deathWishesData = ["Travel to Paris", "Write a letter to grandson", "See family from abroad"];
-
-  // Clear existing death wish list items
-  deathWishList.innerHTML = '';
-
-  // Populate the death wish list with new items
-  deathWishesData.forEach(wish => {const listItem = document.createElement('li');
-  listItem.textContent = wish; 
-  deathWishList.appendChild(listItem);});
-
-  calculateAge(new Date(1990, 1, 1));
 
 
-}
+// Fetch data for the specific patient, display it, handle user interactions, etc.
 
-//  below is code from the course
-var chart = null;
+// Select the <ul> element representing the death wish list
+const deathWishList = document.getElementById('deathwishes');
+
+// TODO: REPLACE FAKE DATA WITH DATA FROM DB!
+const deathWishesData = ["Travel to Paris", "Write a letter to grandson", "See family from abroad"];
+
+// Clear existing death wish list items
+deathWishList.innerHTML = '';
+
+// Populate the death wish list with new items
+deathWishesData.forEach(wish => {const listItem = document.createElement('li');
+listItem.textContent = wish; 
+deathWishList.appendChild(listItem);});
+
+calculateAge(new Date(1990, 1, 1));
+
+
 
 // Calculate the age for the specific page from the birthdate and the current date
 function calculateAge(birthdate) {
@@ -154,129 +147,137 @@ function calculateAge(birthdate) {
   document.getElementById('age').textContent = age;
 }
 
-function refreshTemperatures() {
-  var select = document.getElementById('patient-select');
-  var id = select.value;
-  if (id === '') {
-    console.log('No patient');
-    document.getElementById('temperature-div').style.visibility = 'hidden';
-    return;
-  }
-
-  document.getElementById('temperature-div').style.visibility = 'visible';
-
-  axios.get('temperatures', {
-    params: {
-      id: id
-    },
-    responseType: 'json'
-  })
-    .then(function(response) {
-      var x = [];
-      var y = [];
-      for (var i = 0; i < response.data.length; i++) {
-        x.push(response.data[i]['time']);
-        y.push(response.data[i]['temperature']);
-      }
-      chart.data.labels = x;
-      chart.data.datasets[0].data = y;
-      chart.update();
-    })
-    .catch(function(response) {
-      alert('URI /temperatures not properly implemented in Flask');
-    });
-}
 
 
-function refreshPatients() {
-  axios.get('patients', {
-    responseType: 'json'
-  })
-    .then(function(response) {
-      var select = document.getElementById('patient-select');
+// End of the code for the specific patient page (specificpage.html)
+// -------------------------------------------------------------------------------------------------------------------
 
-      while (select.options.length > 0) {
-        select.options.remove(0);
-      }
-
-      for (var i = 0; i < response.data.length; i++) {
-        var id = response.data[i]['id'];
-        var name = response.data[i]['name'];
-        select.appendChild(new Option(name, id));
-      }
-      refreshTemperatures();
-    })
-    .catch(function(response) {
-      alert('URI /patients not properly implemented in Flask');
-    });
-}
+// Code from Sebastian TP session
 
 
-document.addEventListener('DOMContentLoaded', function() {
-  chart = new Chart(document.getElementById('temperatures'), {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: [{
-        label: 'Temperature',
-        data: [],
-        fill: false
-      }]
-    },
-    options: {
-      animation: {
-        duration: 0  // Disable animations
-      },
-      scales: {
-        x: {
-          ticks: {
-            // Rotate the X label
-            maxRotation: 45,
-            minRotation: 45
-          }
-        }
-      }
-    }
-  });
+// function refreshTemperatures() {
+//   var select = document.getElementById('patient-select');
+//   var id = select.value;
+//   if (id === '') {
+//     console.log('No patient');
+//     document.getElementById('temperature-div').style.visibility = 'hidden';
+//     return;
+//   }
 
-  refreshPatients();
+//   document.getElementById('temperature-div').style.visibility = 'visible';
 
-  document.getElementById('patient-select').addEventListener('change', refreshTemperatures);
+//   axios.get('temperatures', {
+//     params: {
+//       id: id
+//     },
+//     responseType: 'json'
+//   })
+//     .then(function(response) {
+//       var x = [];
+//       var y = [];
+//       for (var i = 0; i < response.data.length; i++) {
+//         x.push(response.data[i]['time']);
+//         y.push(response.data[i]['temperature']);
+//       }
+//       chart.data.labels = x;
+//       chart.data.datasets[0].data = y;
+//       chart.update();
+//     })
+//     .catch(function(response) {
+//       alert('URI /temperatures not properly implemented in Flask');
+//     });
+// }
 
-  document.getElementById('patient-button').addEventListener('click', function() {
-    var name = document.getElementById('patient-input').value;
-    if (name == '') {
-      alert('No name was provided');
-    } else {
-      axios.post('create-patient', {
-        name: name
-      })
-        .then(function(response) {
-          document.getElementById('patient-input').value = '';
-          refreshPatients();
-        })
-        .catch(function(response) {
-          alert('URI /create-patient not properly implemented in Flask');
-        });
-    }
-  });
 
-  document.getElementById('temperature-button').addEventListener('click', function() {
-    var temperature = parseFloat(document.getElementById('temperature-input').value);
-    if (isNaN(temperature)) {
-      alert('Not a valid number');
-    } else {
-      axios.post('record', {
-        id: document.getElementById('patient-select').value,
-        temperature: temperature
-      })
-        .then(function(response) {
-          document.getElementById('temperature-input').value = '';
-          refreshTemperatures();
-        })
-        .catch(function(response) {
-          alert('URI /record not properly implemented in Flask');
-        });
-    }
-  });
-});
+// function refreshPatients() {
+//   axios.get('patients', {
+//     responseType: 'json'
+//   })
+//     .then(function(response) {
+//       var select = document.getElementById('patient-select');
+
+//       while (select.options.length > 0) {
+//         select.options.remove(0);
+//       }
+
+//       for (var i = 0; i < response.data.length; i++) {
+//         var id = response.data[i]['id'];
+//         var name = response.data[i]['name'];
+//         select.appendChild(new Option(name, id));
+//       }
+//       refreshTemperatures();
+//     })
+//     .catch(function(response) {
+//       alert('URI /patients not properly implemented in Flask');
+//     });
+// }
+
+
+// document.addEventListener('DOMContentLoaded', function() {
+//   chart = new Chart(document.getElementById('temperatures'), {
+//     type: 'line',
+//     data: {
+//       labels: [],
+//       datasets: [{
+//         label: 'Temperature',
+//         data: [],
+//         fill: false
+//       }]
+//     },
+//     options: {
+//       animation: {
+//         duration: 0  // Disable animations
+//       },
+//       scales: {
+//         x: {
+//           ticks: {
+//             // Rotate the X label
+//             maxRotation: 45,
+//             minRotation: 45
+//           }
+//         }
+//       }
+//     }
+//   });
+
+//   refreshPatients();
+
+//   document.getElementById('patient-select').addEventListener('change', refreshTemperatures);
+
+//   document.getElementById('patient-button').addEventListener('click', function() {
+//     var name = document.getElementById('patient-input').value;
+//     if (name == '') {
+//       alert('No name was provided');
+//     } else {
+//       axios.post('create-patient', {
+//         name: name
+//       })
+//         .then(function(response) {
+//           document.getElementById('patient-input').value = '';
+//           refreshPatients();
+//         })
+//         .catch(function(response) {
+//           alert('URI /create-patient not properly implemented in Flask');
+//         });
+//     }
+//   });
+
+//   document.getElementById('temperature-button').addEventListener('click', function() {
+//     var temperature = parseFloat(document.getElementById('temperature-input').value);
+//     if (isNaN(temperature)) {
+//       alert('Not a valid number');
+//     } else {
+//       axios.post('record', {
+//         id: document.getElementById('patient-select').value,
+//         temperature: temperature
+//       })
+//         .then(function(response) {
+//           document.getElementById('temperature-input').value = '';
+//           refreshTemperatures();
+//         })
+//         .catch(function(response) {
+//           alert('URI /record not properly implemented in Flask');
+//         });
+//     }
+//   });
+// });

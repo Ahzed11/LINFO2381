@@ -14,7 +14,7 @@
     /* Styles for the container for patient info, placed to the left, with boarder to group meta data*/
     #patient-container {
       position: absolute;
-      top: 20px;
+      top: 100px; /* Position it 80px down from the top */
       left: 20px;
       padding: 20px;
       border: 1px solid #ccc;
@@ -42,10 +42,72 @@
       font-size: 44px;
     }
 
+    /* Style for the button container */
+  .button-container {
+    display: flex;
+    align-items: center;
+  }
+   /* Style for the back button */
+   .back-button {
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    margin: 20px 0px 20px 20px; /* top right bottom left */
+    padding: 10px;
+    text-align: center;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .back-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Style for the email button */
+  .email-button {
+    display: inline-block;
+    width: 150px;
+    height: 30px;
+    margin: 20px 0px 20px 600px; /* top right bottom left */
+    padding: 10px;
+    text-align: center;
+    background-color: #ff0000;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.email-button:hover {
+  background-color: #cc0000;
+}
+  /* Style for the logo */
+  #Logo {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 150px; 
+    height: 150px; /* Adjust as needed */
+    border: none;
+  }
+
   </style>
 </head>
 <body>
 
+  <div class="button-container">
+    <!-- Button to go back to mainpage -->
+    <a class="back-button" href="mainpage.html">Back to main page</a>
+  
+    <!-- Button to send alert email -->
+    <a class="email-button" href="mailto:example@example.com?subject=Alert&body=This is an alert message.">Send Alert Email</a>
+  </div>
+  
   <div id="patient-container">
     <div class="patient-details">
       <img id="patient-picture" src="https://voice.ons.org/sites/default/files/2018-12/1000_iStock-481073846.jpg" alt="Patient">
@@ -72,7 +134,11 @@
           <li>Write a book</li>
           <li>Spend time with family</li>
       </ul>
-      
+      </div>
+  </div>
+  
+  <!-- Add logo to top -->
+  <img id="Logo" src="..\images\Beyond_Wishes_Logo.png" alt="Logo"> 
 
   <script src="app.js"></script>
 </body>
