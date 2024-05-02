@@ -52,6 +52,8 @@ couchdb_client = CouchDBClient(url="http://couchdb:5984")
 async def startup_event():
     try:
         couchdb_client.createDatabase(PATIENTS_DB)
+
+        # TODO: Insert patients from PatientModels
     except Exception:
         pass
 #endregion
