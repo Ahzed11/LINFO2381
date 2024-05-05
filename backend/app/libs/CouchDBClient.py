@@ -97,7 +97,7 @@ class CouchDBClient:
     # want to manually set an identifier by yourself, you can specify
     # it in the "_id" field of "doc".
     def addDocument(self, db, doc):
-        if '_id' in doc:
+        if '_id' in doc and doc["_id"] is not None:
             key = doc['_id']
         else:
             key = self._generateUuid()

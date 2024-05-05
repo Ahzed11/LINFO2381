@@ -1,13 +1,11 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from smtplib import SMTP, SMTPException
 import smtplib
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from .libs.CouchDBClient import CouchDBClient
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, Field
 import os
 
 #region CONSTANTS
@@ -19,8 +17,8 @@ class Relative(BaseModel):
     first_name: str
     last_name: str
     relation: str
-    email: Optional[str] = None
-    phone_number: Optional[str] = None
+    email: str | None = None
+    phone_number: str | None = None
 
 class Patient(BaseModel):
     first_name: str
@@ -32,6 +30,14 @@ class Patient(BaseModel):
     prognosis: str
     wish: str
     relatives: list[Relative] = []
+
+class PatientFromDB(Patient):
+    id: str | None = Field(alias="_id", default=None)
+    rev: str | None = Field(alias="_rev", default=None)
+
+class Message(BaseModel):
+    message: str
+
 #endregion
 
 #region FASTAPI/COUCHDB SETUP
@@ -59,12 +65,9 @@ async def startup_event():
 #endregion
 
 #region API ENDPOINTS
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
 
 @app.get("/patients/")
-async def list_patients():
+async def list_patients() -> list[PatientFromDB]:
     patient_keys = couchdb_client.listDocuments(PATIENTS_DB)
     patients = []
     for key in patient_keys:
@@ -73,13 +76,15 @@ async def list_patients():
     return patients
 
 @app.get("/patients/{patient_id}")
-def get_patient(patient_id: str):
-    patient = couchdb_client.getDocument(PATIENTS_DB, patient_id)
-
-    return patient
+def get_patient(patient_id: str) -> PatientFromDB:
+    try:
+        patient = couchdb_client.getDocument(PATIENTS_DB, patient_id)
+        return patient
+    except Exception:
+        raise HTTPException(status_code=404, detail="Patient does not exist")
 
 @app.post("/patients/")
-async def create_patient(patient: Patient):
+async def create_patient(patient: Patient) -> PatientFromDB:
     patient_as_json = jsonable_encoder(patient)
     key = couchdb_client.addDocument(PATIENTS_DB, patient_as_json) 
     new_patient = couchdb_client.getDocument(PATIENTS_DB, key)
@@ -87,8 +92,13 @@ async def create_patient(patient: Patient):
 
 
 @app.post("/patients/{patient_id}/notify-relatives")
-async def submit_wish(patient_id: str):
-    patient = couchdb_client.getDocument(PATIENTS_DB, patient_id)
+async def notify_relatives(patient_id: str) -> Message:
+    patient = None
+    
+    try:
+        patient = couchdb_client.getDocument(PATIENTS_DB, patient_id)
+    except Exception:
+        raise HTTPException(status_code=404, detail="Patient does not exist")
 
     for relative in patient["relatives"]:
         email = relative["email"]
@@ -99,6 +109,9 @@ async def submit_wish(patient_id: str):
         else:
             raise HTTPException(status_code=500, detail="Email could not be sent.")
 
+#endregion
+
+#region utils
 
 def send_email(recipient_email: str, death_wish: str):
     sender_email = "test"
@@ -118,4 +131,5 @@ def send_email(recipient_email: str, death_wish: str):
     except smtplib.SMTPException as e:
         print(f"Failed to send email: {e}")
         return False
+
 #endregion
