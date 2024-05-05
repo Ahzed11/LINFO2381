@@ -93,21 +93,23 @@ async def create_patient(patient: Patient) -> PatientFromDB:
 
 @app.post("/patients/{patient_id}/notify-relatives")
 async def notify_relatives(patient_id: str) -> Message:
-    patient = None
+    patient: PatientFromDB | None = None
     
     try:
-        patient = couchdb_client.getDocument(PATIENTS_DB, patient_id)
+        patient_document = couchdb_client.getDocument(PATIENTS_DB, patient_id)
+        patient = PatientFromDB.parse_obj(patient_document)
     except Exception:
         raise HTTPException(status_code=404, detail="Patient does not exist")
 
-    for relative in patient["relatives"]:
-        email = relative["email"]
-        wish = patient["wish"]
+    wish = patient.wish
+    for relative in patient.relatives:
+        email = relative.email
+        
         result = send_email(email, wish)
-        if result:
-            return {"message": "Wish submitted and email sent successfully."}
-        else:
+        if not result:
             raise HTTPException(status_code=500, detail="Email could not be sent.")
+        
+    return {"message": "Wish submitted and email sent successfully."}
 
 #endregion
 
