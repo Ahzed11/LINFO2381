@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Add New Patient</title>
@@ -10,46 +11,55 @@
             padding: 0;
             background-color: #f0f0f0;
         }
+
         .container {
             max-width: 600px;
             margin: 20px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
             font-size: 24px;
             color: #333;
             text-align: center;
             margin-bottom: 20px;
         }
+
         form {
             display: flex;
             flex-direction: column;
         }
+
         label {
             margin-top: 10px;
             font-size: 16px;
             color: #333;
         }
+
         .row {
             display: flex;
-            justify-content: space-between; /* Ajuste les éléments uniformément */
+            justify-content: space-between;
+            /* Ajuste les éléments uniformément */
             margin-bottom: 10px;
         }
-        
+
         .form-group {
             display: flex;
             flex-direction: column;
-            flex: 1;  /* Assure que chaque form-group prend un espace équivalent */
-            margin-right: 10px; /* Espacement entre les champs */
+            flex: 1;
+            /* Assure que chaque form-group prend un espace équivalent */
+            margin-right: 10px;
+            /* Espacement entre les champs */
         }
-        
+
         .form-group:last-child {
-            margin-right: 0; /* Enlève la marge pour le dernier élément dans la row */
+            margin-right: 0;
+            /* Enlève la marge pour le dernier élément dans la row */
         }
-        
+
         input[type="text"],
         input[type="number"],
         input[type="date"],
@@ -64,9 +74,11 @@
             margin-top: 5px;
             box-sizing: border-box;
         }
+
         textarea {
             resize: vertical;
         }
+
         button[type="submit"] {
             width: 100%;
             padding: 12px;
@@ -79,71 +91,164 @@
             transition: background-color 0.3s ease;
             margin-top: 20px;
         }
+
         button[type="submit"]:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Add New Patient</h1>
-        <form id="newPatientForm">
+        <form id="createPatientForm">
             <div class="row">
                 <div class="form-group">
-                    <label for="first_name">First name:</label>
-                    <input type="text" id="first_name" name="first_name" required>
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" name="first_name" required>
                 </div>
                 <div class="form-group">
-                    <label for="last_name">Last name:</label>
-                    <input type="text" id="last_name" name="last_name" required>
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" name="last_name" required>
                 </div>
             </div>
-            
 
-            <label for="birthdate">Date de Naissance:</label>
+            <!-- <label for="picture">Patient picture:</label>
+            <input type="file" id="picture" name="picture" accept="image/png, image/jpeg" />
+            <img id="previewImage" src="#" alt="Preview" style="max-width: 200px; max-height: 200px; display: none;"><br> -->
+
+            <label for="birthdate">Birthdate:</label>
             <input type="date" id="birthdate" name="birthdate" required>
 
-            <label for="sexe">Sexe:</label>
-        <select id="sexe" name="sexe" required>
-            <option value="" disabled selected>Select your sex</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-        </select>   
+            <label for="sex">Sex:</label><br>
+            <select id="sexe" name="sex" required>
+                <option value="" disabled selected>Select the sex</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
 
-        <label for="photo">Photo:</label>
-        <input type="file" id="photo" name="photo" accept="image/*">
+            <label for="diagnosis">Diagnosis:</label><br>
+            <input type="text" id="diagnosis" name="diagnosis" required><br>
 
+            <label for="prognosis">Prognosis:</label><br>
+            <input type="text" id="prognosis" name="prognosis" required><br>
 
-            <label for="diagnosis">Diagnosis:</label>
-            <textarea id="diagnosis" name="diagnosis" rows="1" ></textarea>
+            <label for="wish">Wish:</label><br>
+            <textarea id="wish" name="wish" required></textarea>
 
-            <label for="prognosis">Prognosis:</label>
-            <textarea id="prognosis" name="prognosis" rows="1" ></textarea>
+            <div id="relativesContainer">
+                <!-- Relative fields will be dynamically added here -->
+            </div>
 
-            <label for="wish">Wish:</label>
-            <textarea id="wish" name="wish" rows="1" ></textarea>
+            <button type="button" id="replace">Replace</button>
 
-            <label for="details">Details:</label>
-            <textarea id="details" name="details" rows="2" ></textarea>
+            <button type="button" id="addRelativeBtn">Add Relative</button>
 
             <button type="submit">Submit</button>
         </form>
     </div>
 
     <script>
-        document.getElementById('newPatientForm').onsubmit = function(event) {
-            event.preventDefault();
-            const formData = {
-                name: document.getElementById('name').value,
-                age: document.getElementById('age').value,
-                details: document.getElementById('details').value
-            };
-            console.log(formData);  // Pour le moment, nous loguons juste les données !!!!!! later, use Axios to send data at the right place 
+        // const pictureInput = document.getElementById('picture');
+        // pictureInput.addEventListener('change', function(event) {
+        //     const file = event.target.files[0];
+        //     const reader = new FileReader();
 
-            // Ici, vous pourriez ajouter un appel AJAX pour envoyer ces données à votre serveur
-            alert('Form submitted! Check console for data. We have to change this to send it to the place with all patients');
-        };
+        //     reader.onload = function() {
+        //         const previewImage = document.getElementById('previewImage');
+        //         previewImage.src = reader.result;
+        //         previewImage.style.display = 'block';
+        //     }
+
+        //     reader.readAsDataURL(file);
+        // });
+
+        const addRelativeBtn = document.getElementById('addRelativeBtn');
+        const relativesContainer = document.getElementById('relativesContainer');
+
+        let relativeIndex = 0;
+
+        addRelativeBtn.addEventListener('click', function () {
+            const relativeFields = `
+                <div class="row">
+                    <div class="form-group">
+                        <label for="relativeFirstName_${relativeIndex}">Relative's First Name:</label>
+                        <input type="text" id="relativeFirstName_${relativeIndex}" name="relatives[${relativeIndex}][first_name]" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="relativeLastName_${relativeIndex}">Relative's Last Name:</label>
+                        <input type="text" id="relativeLastName_${relativeIndex}" name="relatives[${relativeIndex}][last_name]" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="relation_${relativeIndex}">Relation:</label>
+                        <input type="text" id="relation_${relativeIndex}" name="relatives[${relativeIndex}][relation]" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="relativeEmail_${relativeIndex}">Relative's email:</label>
+                        <input type="text" id="relativeEmail_${relativeIndex}" name="relatives[${relativeIndex}][email]" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="relativePhoneNumber_${relativeIndex}">Relative's phone number:</label>
+                        <input type="text" id="relativePhoneNumber_${relativeIndex}" name="relatives[${relativeIndex}][phone_number]" required>
+                    </div>
+                </div>
+            `;
+            relativeIndex++;
+
+            relativesContainer.insertAdjacentHTML('beforeend', relativeFields);
+        });
+
+        document.getElementById('createPatientForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const jsonData = {};
+
+            console.log(formData);
+
+            for (const [key, value] of formData.entries()) {
+                if (key.includes('relatives')) {
+                    if (!jsonData.relatives) {
+                        jsonData.relatives = [];
+                    }
+                    const relativeIndex = parseInt(key.split('[')[1]);
+                    if (!jsonData.relatives[relativeIndex]) {
+                        jsonData.relatives[relativeIndex] = {};
+                    }
+                    const relativeKey = key.split(']')[1].substring(1); // Get the key after ']'
+                    jsonData.relatives[relativeIndex][relativeKey] = value;
+                } else {
+                    jsonData[key] = value;
+                }
+            }
+
+            fetch('http://localhost:80/patients/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    window.location.replace("./specificpage.html?patientId=" + data["_id"]);
+                    alert('Patient created successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while creating the patient');
+                });
+        });
     </script>
 </body>
+
 </html>

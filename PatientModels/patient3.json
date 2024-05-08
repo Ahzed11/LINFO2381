@@ -2,7 +2,7 @@
   "first_name": "Michael",
   "last_name": "Johnson",
   "picture": "profile.png",
-  "age": 55,
+  "birthdate": "2000-10-04",
   "sex": "male",
   "relatives": [
     {"first_name": "Sarah", "last_name": "Johnson", "relation": "spouse", "email": "sarah.johnson@example.com", "phone_number": "1234567890"},

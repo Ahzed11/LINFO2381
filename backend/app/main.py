@@ -23,8 +23,8 @@ class Relative(BaseModel):
 class Patient(BaseModel):
     first_name: str
     last_name: str
-    picture: str
-    age: int
+    picture: str | None = None
+    birthdate: str
     sex: str
     diagnosis: str
     prognosis: str

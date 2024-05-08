@@ -2,7 +2,7 @@
   "first_name": "John",
   "last_name": "Doe",
   "picture": "",
-  "age": 45,
+  "birthdate": "2000-10-04",
   "sex": "male",
   "relatives": [
     {"first_name": "didier", "last_name": "raoult", "relation": "parent", "email": "dr@gmail.com", "phone_number": "0462283826"}
