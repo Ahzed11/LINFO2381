@@ -1,255 +1,196 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-    <title>List of patients</title>
-    <!-- Inclusion de Chart.js et Axios dans le <head> pour qu'ils chargent avant les scripts qui les utilisent -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 32px;
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        #searchInput {
-            width: 100%;
-            height: 40px;
-            font-size: 18px;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #fff;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        tr:hover {
-            background-color: #f9f9f9;
-        }
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0,0,0); /* Fallback color */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        }
-        
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%; /* Could be more or less, depending on screen size */
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-        }
-        
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .button-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .button-container button {
-            display: inline-block; /* Affiche les boutons côte à côte */
-            width: 200px; /* Largeur identique pour tous les boutons */
-            height: 40px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-right: 10px; /* Espacement entre les boutons */
-        }
-        
-        .button-container button:hover {
-            background-color: #0056b3;
-        }
-        
-        .button-container button:last-child {
-            margin-right: 0; /* Pas de marge à droite du dernier bouton */
-        }
-        
-          /* Style for the logo */
-        #Logo {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        width: 150px; 
-        height: 150px; /* Adjust as needed */
-        border: none;
-  }
-        
-    </style>
+    <title>Beyond wishes - Patients</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
+
 <body>
-    <div class="container">
-        <h1>List of patients</h1>
-        
-        <!-- Barre de recherche toujours accessible sur la page principale -->
-        <input type="text" id="searchInput" placeholder="Search for names" onkeyup="filterPatients()">
-    
-        <div class="button-container">
-            <button id="openFilterModal">Filter Patients</button>
-            <button id="addpatient" onclick="window.location.href='addpatient.html';">Add New Patient</button>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary mb-5">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="./mainpage.html">
+                <img id="Logo" src="..\images\Beyond_Wishes_Logo.png" alt="Logo" width="60" height="70" class="d-inline-block align-text-top">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="./mainpage.html">Home</a>
+                    </li>
+                </ul>
+                <a href="./addpatient.html" class="btn btn-primary">
+                    Create new patient
+                </a>
+            </div>
         </div>
-    
-        <!-- Modal pour les filtres -->
-        <div id="filterModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Filter Patients</h2>
-                <select id="filterSex" onchange="filterPatients()">
-                    <option value="">Any Sex</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                </select>
-                <input type="number" id="minAge" placeholder="Minimum Age" oninput="filterPatients()">
-                <input type="number" id="maxAge" placeholder="Maximum Age" oninput="filterPatients()">
-                <button onclick="resetFilters()">Reset Filters</button>
+    </nav>
+
+    <section class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Patients</h1>
+
+                <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search by name"
+                    onkeyup="filterPatients() ">
+
+                <button id="openFilterModal" class="btn btn-primary col-3">Filter Patients</button>
+
+                <!-- Modal for filters -->
+                <div id="filterModal" class="modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title">Filter Patients</h2>
+                                <button id="modalClose" type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <select id="filterSex" class="form-select mb-3" onchange="filterPatients()">
+                                    <option value="">Any Sex</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <input type="number" id="minAge" class="form-control mb-3" placeholder="Minimum Age"
+                                    oninput="filterPatients()">
+                                <input type="number" id="maxAge" class="form-control mb-3" placeholder="Maximum Age"
+                                    oninput="filterPatients()">
+                                <button class="btn btn-secondary" onclick="resetFilters()">Reset Filters</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <table id="patientsTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Sex</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows will be added by JavaScript -->
+                    </tbody>
+                </table>
 
             </div>
         </div>
-        <table id="patientsTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Age</th>
-                    <th>Sex</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Les lignes du tableau seront ajoutées par JavaScript -->
-            </tbody>
-        </table>
-    </div>
-    
+    </section>
 
     <script>
-        let patients = []; // Instanciation d'un tableau vide pour stocker les patients. Let est utilisé pour déclarer une variable locale dans une fonction.
+        let patients = [];
 
-        
-        // DOMContentLoaded is the event that fires when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.
-        document.addEventListener("DOMContentLoaded", () => { 
-            console.log("Hello World!");
-            
-        fetch('http://localhost/patients/', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(response => response.json())
-            .then(data => {
-                console.log(data);
-                patients = data;
-                loadPatients();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('An error occurred while fetching the patients');
-            });
+        const modal = document.getElementById("filterModal");
+        const openFilterModal = document.getElementById("openFilterModal");
+        const closeFilterModal = document.getElementById("modalClose");
+
+        openFilterModal.addEventListener("click", () => {
+            modal.style.display = "block";
         });
-        
+
+        closeFilterModal.addEventListener("click", () => {
+            closeModal();
+        });
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+
+        // DOMContentLoaded is the event that fires when the initial HTML document has been completely loaded and parsed.
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch('http://localhost/patients/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(response => response.json())
+                .then(data => {
+                    patients = data;
+                    loadPatients();
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('An error occurred while fetching the patients');
+                });
+        });
+
 
         // Fonction pour charger les patients dans le tableau HTML
         function loadPatients() {
-            var table = document.getElementById('patientsTable').getElementsByTagName('tbody')[0];
-            patients.forEach(function(patient) {
+            const table = document.getElementById('patientsTable').getElementsByTagName('tbody')[0];
+            patients.forEach(function (patient) {
 
                 // Calculate the age of the patient
                 const age = calculateAge(new Date(patient.birthdate));
 
-                var row = table.insertRow();
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                var cell3 = row.insertCell(2);
-                var cell4 = row.insertCell(3);
+                const row = table.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+                const cell4 = row.insertCell(3);
                 cell1.textContent = patient.first_name + ' ' + patient.last_name;
                 cell2.textContent = age;
                 cell3.textContent = patient.sex;
                 cell4.innerHTML = '<a href="specificpage.html?patientId=' + patient["_id"] + '">See more</a>'; // 4th cell is the see more link to the specific page
             });
         }
-        
+
         function calculateAge(birthdate) {
             const age = new Date().getFullYear() - birthdate.getFullYear();
             // Set the age in the HTML (id called age)
             return age;
         }
 
+        function resetFilters() {
+            document.getElementById('filterSex').value = ""; // Remet le sexe à 'Any Sex'
+            document.getElementById('minAge').value = "";   // Efface le champ âge minimum
+            document.getElementById('maxAge').value = "";   // Efface le champ âge maximum
+
+            filterPatients(); // Applique les filtres réinitialisés pour mettre à jour l'affichage
+            closeModal();     // Ferme le modal après la réinitialisation
+        }
+
         function filterPatients() {
-            var input = document.getElementById("searchInput");
-            var filter = input.value.toUpperCase();
+            var input = document.getElementById("searchInput").value.toUpperCase();
+            var filterSex = document.getElementById("filterSex").value;
+            var minAge = parseInt(document.getElementById("minAge").value, 10);
+            var maxAge = parseInt(document.getElementById("maxAge").value, 10);
+
             var table = document.getElementById("patientsTable");
             var tr = table.getElementsByTagName("tr");
 
-            for (var i = 0; i < tr.length; i++) {
-                var td = tr[i].getElementsByTagName("td")[0];
-                if (td) {
-                    var txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }       
+            for (var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td");
+                var txtName = td[0].textContent || td[0].innerText;
+                var age = parseInt(td[1].textContent || td[1].innerText, 10);
+                var sex = td[2].textContent || td[2].innerText.toLowerCase();
+
+                if (
+                    (txtName.toUpperCase().indexOf(input) > -1 || input === "") &&
+                    (filterSex === "" || sex === filterSex) &&
+                    (isNaN(minAge) || age >= minAge) &&
+                    (isNaN(maxAge) || age <= maxAge)
+                ) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
             }
         }
-
-        // Appel de la fonction au chargement de la page
-        window.onload = loadPatients;
     </script>
 
-    <img id="Logo" src="..\images\Beyond_Wishes_Logo.png" alt="Logo"> 
-    <script src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>

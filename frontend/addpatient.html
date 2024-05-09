@@ -3,252 +3,210 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Add New Patient</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            font-size: 24px;
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-top: 10px;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            /* Ajuste les éléments uniformément */
-            margin-bottom: 10px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            /* Assure que chaque form-group prend un espace équivalent */
-            margin-right: 10px;
-            /* Espacement entre les champs */
-        }
-
-        .form-group:last-child {
-            margin-right: 0;
-            /* Enlève la marge pour le dernier élément dans la row */
-        }
-
-        input[type="text"],
-        input[type="number"],
-        input[type="date"],
-        input[type="file"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-top: 5px;
-            box-sizing: border-box;
-        }
-
-        textarea {
-            resize: vertical;
-        }
-
-        button[type="submit"] {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 20px;
-        }
-
-        button[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Beyond wishes - Create new patient</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <body>
-    <div class="container">
-        <h1>Add New Patient</h1>
-        <form id="createPatientForm">
-            <div class="row">
-                <div class="form-group">
-                    <label for="firstName">First Name:</label>
-                    <input type="text" id="firstName" name="first_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name:</label>
-                    <input type="text" id="lastName" name="last_name" required>
-                </div>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary mb-5">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="./mainpage.html">
+                <img id="Logo" src="..\images\Beyond_Wishes_Logo.png" alt="Logo" width="60" height="70"
+                    class="d-inline-block align-text-top">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="./mainpage.html">Home</a>
+                    </li>
+                </ul>
+                <a href="./addpatient.html" class="btn btn-primary">
+                    Create new patient
+                </a>
             </div>
+        </div>
+    </nav>
 
-            <!-- <label for="picture">Patient picture:</label>
-            <input type="file" id="picture" name="picture" accept="image/png, image/jpeg" />
-            <img id="previewImage" src="#" alt="Preview" style="max-width: 200px; max-height: 200px; display: none;"><br> -->
+    <section class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">
+                    Create New Patient
+                </h1>
 
-            <label for="birthdate">Birthdate:</label>
-            <input type="date" id="birthdate" name="birthdate" required>
+                <form id="createPatientForm" class="p-2">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="firstName" class="form-label">First Name:</label>
+                            <input type="text" id="firstName" name="first_name" class="form-control" required>
+                        </div>
+                        <div class="col">
+                            <label for="lastName" class="form-label">Last Name:</label>
+                            <input type="text" id="lastName" name="last_name" class="form-control" required>
+                        </div>
+                    </div>
 
-            <label for="sex">Sex:</label><br>
-            <select id="sexe" name="sex" required>
-                <option value="" disabled selected>Select the sex</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
+                    <label for="birthdate" class="form-label">Birthdate:</label>
+                    <input type="date" id="birthdate" name="birthdate" class="form-control mb-3" required>
 
-            <label for="diagnosis">Diagnosis:</label><br>
-            <input type="text" id="diagnosis" name="diagnosis" required><br>
+                    <label for="sex" class="form-label">Sex:</label>
+                    <select id="sexe" name="sex" class="form-select mb-3" required>
+                        <option value="" disabled selected>Select the sex</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
 
-            <label for="prognosis">Prognosis:</label><br>
-            <input type="text" id="prognosis" name="prognosis" required><br>
+                    <label for="diagnosis" class="form-label">Diagnosis:</label>
+                    <input type="text" id="diagnosis" name="diagnosis" class="form-control mb-3" required>
 
-            <label for="wish">Wish:</label><br>
-            <textarea id="wish" name="wish" required></textarea>
+                    <label for="prognosis" class="form-label">Prognosis:</label>
+                    <input type="text" id="prognosis" name="prognosis" class="form-control mb-3" required>
 
-            <div id="relativesContainer">
-                <!-- Relative fields will be dynamically added here -->
+                    <label for="wish" class="form-label">Wish:</label>
+                    <textarea id="wish" name="wish" class="form-control mb-3" required></textarea>
+
+                    <hr id="separator" />
+
+                    <div id="relativesContainer">
+                        <!-- Relative fields will be dynamically added here -->
+                    </div>
+
+
+                    <button type="button" id="addRelativeBtn" class="btn btn-primary mb-3">Add Relative</button>
+
+
+                    <div class="row">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                </form>
             </div>
+        </div>
 
-            <button type="button" id="replace">Replace</button>
+        <script>
+            // const pictureInput = document.getElementById('picture');
+            // pictureInput.addEventListener('change', function(event) {
+            //     const file = event.target.files[0];
+            //     const reader = new FileReader();
 
-            <button type="button" id="addRelativeBtn">Add Relative</button>
+            //     reader.onload = function() {
+            //         const previewImage = document.getElementById('previewImage');
+            //         previewImage.src = reader.result;
+            //         previewImage.style.display = 'block';
+            //     }
 
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+            //     reader.readAsDataURL(file);
+            // });
 
-    <script>
-        // const pictureInput = document.getElementById('picture');
-        // pictureInput.addEventListener('change', function(event) {
-        //     const file = event.target.files[0];
-        //     const reader = new FileReader();
+            const addRelativeBtn = document.getElementById('addRelativeBtn');
+            const relativesContainer = document.getElementById('relativesContainer');
+            const separator = document.getElementById("separator");
+            separator.style.display = "none";
 
-        //     reader.onload = function() {
-        //         const previewImage = document.getElementById('previewImage');
-        //         previewImage.src = reader.result;
-        //         previewImage.style.display = 'block';
-        //     }
+            let relativeIndex = 0;
 
-        //     reader.readAsDataURL(file);
-        // });
-
-        const addRelativeBtn = document.getElementById('addRelativeBtn');
-        const relativesContainer = document.getElementById('relativesContainer');
-
-        let relativeIndex = 0;
-
-        addRelativeBtn.addEventListener('click', function () {
-            const relativeFields = `
-                <div class="row">
-                    <div class="form-group">
-                        <label for="relativeFirstName_${relativeIndex}">Relative's First Name:</label>
-                        <input type="text" id="relativeFirstName_${relativeIndex}" name="relatives[${relativeIndex}][first_name]" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="relativeLastName_${relativeIndex}">Relative's Last Name:</label>
-                        <input type="text" id="relativeLastName_${relativeIndex}" name="relatives[${relativeIndex}][last_name]" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="relation_${relativeIndex}">Relation:</label>
-                        <input type="text" id="relation_${relativeIndex}" name="relatives[${relativeIndex}][relation]" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group">
-                        <label for="relativeEmail_${relativeIndex}">Relative's email:</label>
-                        <input type="text" id="relativeEmail_${relativeIndex}" name="relatives[${relativeIndex}][email]" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="relativePhoneNumber_${relativeIndex}">Relative's phone number:</label>
-                        <input type="text" id="relativePhoneNumber_${relativeIndex}" name="relatives[${relativeIndex}][phone_number]">
-                    </div>
-                </div>
-            `;
-            relativeIndex++;
-
-            relativesContainer.insertAdjacentHTML('beforeend', relativeFields);
-        });
-
-        document.getElementById('createPatientForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            const formData = new FormData(this);
-            const jsonData = {};
-
-            console.log(formData);
-
-            for (const [key, value] of formData.entries()) {
-                if (key.includes('relatives')) {
-                    if (!jsonData.relatives) {
-                        jsonData.relatives = [];
-                    }
-                    const relativeIndex = parseInt(key.split('[')[1]);
-                    if (!jsonData.relatives[relativeIndex]) {
-                        jsonData.relatives[relativeIndex] = {};
-                    }
-                    const relativeKey = key.split(']')[1].substring(1); // Get the key after ']'
-                    jsonData.relatives[relativeIndex][relativeKey] = value;
-                } else {
-                    jsonData[key] = value;
+            function incrementRelativeIndex() {
+                relativeIndex++;
+                if (relativeIndex > 0) {
+                    separator.style.display = "block"
                 }
             }
 
-            fetch('http://localhost:80/patients/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(jsonData)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+            function decrementRelativeIndex() {
+                if (relativeIndex > 0) {
+                    relativeIndex--;
+                }
+
+                if (relativeIndex === 0) {
+                    separator.style.display = "none"
+                }
+            }
+
+            addRelativeBtn.addEventListener('click', function () {
+                const relativeFields = `
+                <div id="relative-n-${relativeIndex}" class="row mb-3">
+                    <div class="col">
+                        <label for="relativeFirstName_${relativeIndex}" class="form-label">Relative's First Name:</label>
+                        <input type="text" id="relativeFirstName_${relativeIndex}" name="relatives[${relativeIndex}][first_name]" class="form-control" required>
+                    </div>
+                    <div class="col">
+                        <label for="relativeLastName_${relativeIndex}" class="form-label">Relative's Last Name:</label>
+                        <input type="text" id="relativeLastName_${relativeIndex}" name="relatives[${relativeIndex}][last_name]" class="form-control" required>
+                    </div>
+                    <div class="col">
+                        <label for="relation_${relativeIndex}" class="form-label">Relation:</label>
+                        <input type="text" id="relation_${relativeIndex}" name="relatives[${relativeIndex}][relation]" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="relativeEmail_${relativeIndex}" class="form-label">Relative's email:</label>
+                        <input type="email" id="relativeEmail_${relativeIndex}" name="relatives[${relativeIndex}][email]" class="form-control" required>
+                    </div>
+                    <div class="col">
+                        <label for="relativePhoneNumber_${relativeIndex}" class="form-label">Relative's phone number:</label>
+                        <input type="text" id="relativePhoneNumber_${relativeIndex}" name="relatives[${relativeIndex}][phone_number]" class="form-control">
+                    </div>
+                </div>
+            `;
+                incrementRelativeIndex();
+
+                relativesContainer.insertAdjacentHTML('beforeend', relativeFields);
+            });
+
+            document.getElementById('createPatientForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const jsonData = {};
+
+                console.log(formData);
+
+                for (const [key, value] of formData.entries()) {
+                    if (key.includes('relatives')) {
+                        if (!jsonData.relatives) {
+                            jsonData.relatives = [];
+                        }
+                        const relativeIndex = parseInt(key.split('[')[1]);
+                        if (!jsonData.relatives[relativeIndex]) {
+                            jsonData.relatives[relativeIndex] = {};
+                        }
+                        const relativeKey = key.split(']')[1].substring(1); // Get the key after ']'
+                        jsonData.relatives[relativeIndex][relativeKey] = value;
+                    } else {
+                        jsonData[key] = value;
                     }
-                    return response.json();
+                }
+
+                fetch('http://localhost:80/patients/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonData)
                 })
-                .then(data => {
-                    console.log('Success:', data);
-                    alert('Patient created successfully!');
-                    window.location.replace("./specificpage.html?patientId=" + data["_id"]);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while creating the patient');
-                });
-        });
-    </script>
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Success:', data);
+                        alert('Patient created successfully!');
+                        window.location.replace("./specificpage.html?patientId=" + data["_id"]);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while creating the patient');
+                    });
+            });
+        </script>
 </body>
 
 </html>
