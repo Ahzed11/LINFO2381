@@ -1,20 +1,30 @@
 # LINFO2381 - Health informatics
-**Group 11**
+
+Beyond wishes
+
+## Members
+
+Group 11:
+
 1. Alexandre Zenon - 06041900
 1. Marc Phillipe Marburger - 77592301
 1. Alejandro Rodriguez Ponce - 24962201
 1. Emilie Carels - 29482000
 
-## Getting started - open vs code terminal and type in:
+## Getting started
+
+Open your terminal and type:
+
 ```sh
 docker compose up
 ```
 
-## Listing the api endpoints and see docs 
-Navigate to `0.0.0.0/docs` in your browser.
+To insert some dummy data into the database, execute an HTTP request with the `POST` verb on the `http://localhost:80/populate` url.
 
-## Mailbox on linux
-http://0.0.0.0:8025/
+## Listing the api endpoints and see docs
 
-## Mailbox on windows
-http://localhost:8025/
+Navigate to `http://localhost:80/docs` in your browser.
+
+## Accessing the mailbox
+
+Navigate to `http://localhost:8025/` in your browser.
