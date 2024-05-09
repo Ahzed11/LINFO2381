@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Beyond wishes - </title>
+    <title>Beyond wishes - Edit patient</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -28,14 +28,9 @@
                         <a class="nav-link active" aria-current="page" href="./mainpage.html">Home</a>
                     </li>
                 </ul>
-                <div class="btn-group" role="group">
-                    <button id="email-button" class="btn btn-danger pr-2">
-                        Send Alert Email
-                    </button>
-                    <a href="./addpatient.html" class="btn btn-primary">
-                        Create new patient
-                    </a>
-                </div>
+                <a href="./addpatient.html" class="btn btn-primary">
+                    Create new patient
+                </a>
             </div>
         </div>
     </nav>
@@ -45,7 +40,14 @@
             <div class="card-body">
                 <h1 id="fullname" class="card-title">Create New Patient</h1>
 
-                <hr/>
+                <div class="btn-group" role="group">
+                    <a type="button" id="editPatient" class="btn btn-warning" href="#">Edit patient</a>
+                    <button id="email-button" class="btn btn-danger">
+                        Send Alert Email
+                    </button>
+                </div>
+
+                <hr />
 
                 <div class="row">
                     <section class="col">
@@ -106,7 +108,7 @@
                     <section class="col">
                         <h2>Relatives</h2>
                         <ul class="list-group" id="relatives">
-                            
+
                         </ul>
                     </section>
                 </div>
@@ -115,20 +117,20 @@
     </section>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => { // DOMContentLoaded is the event that fires when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.
-            // Get the patient ID from the URL
-            const urlParams = new URLSearchParams(window.location.search);
+        // Get the patient ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        // Get the param : "patientId"
+        const patientId = urlParams.get('patientId');
 
-            // Get the param : "patientId"
-            const patientId = urlParams.get('patientId');
+        document.addEventListener("DOMContentLoaded", () => { // DOMContentLoaded is the event that fires when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.
 
             // Fetch the patient data from the API
-
             fetch(`http://localhost:80/patients/${patientId}`)
                 .then(response => response.json())
                 .then(patient => {
+                    document.getElementById("editPatient").setAttribute("href", `./editpatient.html?patientId=${patient["_id"]}`)
+
                     const fullname = `${patient.first_name} ${patient.last_name}`
-                    document.title += " " + fullname;
 
                     // Calculate the age of the patient
                     var age = calculateAge(new Date(patient.birthdate));
@@ -145,9 +147,9 @@
                     // Modify the content of deathwishes with id deathwishes-list
                     const deathwishesList = document.getElementById('deathwishes-list');
                     deathwishesList.innerHTML = patient.wish;
-                    
+
                     const relativesList = document.getElementById("relatives");
-                    for(relative of patient.relatives) {
+                    for (relative of patient.relatives) {
                         const relativeStr = `
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
@@ -167,9 +169,6 @@
 
         // Add an event listener to the email button 
         document.getElementById('email-button').addEventListener('click', () => {
-            // Get the patient ID from the URL
-            const patientId = new URLSearchParams(window.location.search).get('patientId');
-
             fetch(`http://localhost:80/patients/${patientId}/notify-relatives`, {
                 method: 'POST',
                 headers: {
@@ -181,7 +180,6 @@
                 alert('No relatives to notify');
             });
         });
-
 
         // Calculate the age for the specific page from the birthdate and the current date
         function calculateAge(birthdate) {
