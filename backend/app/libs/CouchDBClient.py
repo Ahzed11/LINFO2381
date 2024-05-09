@@ -152,6 +152,12 @@ class CouchDBClient:
                          auth = self._getAuthentication())
         r.raise_for_status()
 
+    def replaceDocument(self, db, doc):
+        r = requests.put('%s/%s/%s?rev=%s' % (self.url, db, doc["_id"], urllib.parse.quote(doc["_rev"])),
+                         data = json.dumps(doc),
+                         auth = self._getAuthentication())
+        r.raise_for_status()
+
 
     # Delete the document associated with identifier "key" that is
     # part of the database "db".

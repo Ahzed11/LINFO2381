@@ -128,6 +128,12 @@ async def populate():
             key = couchdb_client.addDocument(PATIENTS_DB, patient)
             print("Added patient to couchdb with key: ", key)
 
+# Need to double check this code...
+@app.put("/patients")
+async def update_patient(patient: PatientFromDB):
+    patient_as_json = jsonable_encoder(patient)
+    couchdb_client.replaceDocument(PATIENTS_DB, patient_as_json)
+    return couchdb_client.getDocument(PATIENTS_DB, patient.id)
 #endregion
 
 #region utils
