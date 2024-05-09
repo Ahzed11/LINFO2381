@@ -77,7 +77,7 @@ async def list_patients() -> list[PatientFromDB]:
 @app.get("/patients/{patient_id}")
 def get_patient(patient_id: str) -> PatientFromDB:
     try:
-        patient = couchdb_client.getDocument(PATIENTS_DB, patient_id)
+        patient = couchdb_client.getDocument(PATIENTS_DB, patient_id)  
         return patient
     except Exception:
         raise HTTPException(status_code=404, detail="Patient does not exist")

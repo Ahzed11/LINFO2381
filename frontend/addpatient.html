@@ -240,8 +240,8 @@
                 })
                 .then(data => {
                     console.log('Success:', data);
-                    window.location.replace("./specificpage.html?patientId=" + data["_id"]);
                     alert('Patient created successfully!');
+                    window.location.replace("./specificpage.html?patientId=" + data["_id"]);
                 })
                 .catch(error => {
                     console.error('Error:', error);

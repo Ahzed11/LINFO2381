@@ -116,53 +116,16 @@ function addPatient() {
 
 // End of the code for the listing patients page (mainpage.html)
 //-------------------------------------------------------------------------------------------------------------------
-
-// Logic for the specific patient page (specificpage.html)
-
-
-// Fetch data for the specific patient, display it, handle user interactions, etc.
-
-// Select the <ul> element representing the death wish list
-const deathWishList = document.getElementById('deathwishes');
-
-// TODO: REPLACE FAKE DATA WITH DATA FROM DB!
-const deathWishesData = ["Travel to Paris", "Write a letter to grandson", "See family from abroad"];
-
-// Clear existing death wish list items
-deathWishList.innerHTML = '';
-
-// Populate the death wish list with new items
-deathWishesData.forEach(wish => {const listItem = document.createElement('li');
-listItem.textContent = wish; 
-deathWishList.appendChild(listItem);});
-
-calculateAge(new Date(1990, 1, 1));
+//
+//-------------------------------------------------------------------------------------------------------------------
 
 
 
-// Calculate the age for the specific page from the birthdate and the current date
-function calculateAge(birthdate) {
-  const age = new Date().getFullYear() - birthdate.getFullYear();
-  // Set the age in the HTML (id called age)
-  document.getElementById('age').textContent = age;
-}
-
-
-document.getElementById('email-button').addEventListener('click', function() {
-  const patientId = new URLSearchParams(window.location.search).get('patientId');
-  axios.post(`http://localhost:80/patients/${patientId}/notify-relatives`), {patientId: patientId}
-    .then(function(response) {
-      alert('Email sent to relative');
-    })
-    .catch(function(response) {
-      alert('No relatives to notify');
-    });
-});
 
 
 
-// End of the code for the specific patient page (specificpage.html)
-// -------------------------------------------------------------------------------------------------------------------
+
+
 
 // Code from Sebastian TP session
 

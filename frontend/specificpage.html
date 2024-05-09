@@ -121,6 +121,7 @@
         <h2 id="diagnosis">Diagnosis: Cancer</h2>
         <h2 id="prognosis">Prognosis: Poor</h2>
         <h2 id="sex">Sex: Male</h2>
+        <h2 id="patient_id">Patient id: xyz</h2>
       </div>
     </div>
   </div>
@@ -129,18 +130,78 @@
       <!-- Header for death wishes -->
       <h2>Death Wishes</h2>
       <!-- Unordered list of death wishes denoted ul, with list items called li -->
-      <div id="deathwishes-list">
-        <ul style="list-style-type: disc; text-align: left;  font-size: 22px;">
-          <li>See louvre</li>
-          <li>Write a book</li>
-          <li>Spend time with family</li>
-      </ul>
-      </div>
+      <p id="deathwishes-list">
+      </p>
   </div>
   
   <!-- Add logo to top -->
   <img id="Logo" src="..\images\Beyond_Wishes_Logo.png" alt="Logo"> 
 
-  <script src="app.js"></script>
+  <script> 
+    //This is instead of app.js 
+    
+    
+    calculateAge(new Date(1990, 1, 1));
+
+
+    document.addEventListener("DOMContentLoaded", () => { // DOMContentLoaded is the event that fires when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.
+      console.log("Hello World!");
+
+      // Get the patient ID from the URL
+      const urlParams = new URLSearchParams(window.location.search);
+
+      // Get the param : "patientId"
+      const patientId = urlParams.get('patientId');
+
+      // Fetch the patient data from the API
+
+      fetch(`http://localhost:80/patients/${patientId}`)
+        .then(response => response.json())
+        .then(patient => {
+          console.log(patient);
+
+          // Calculate the age of the patient
+          var age = calculateAge(new Date(patient.birthdate));
+
+          // Set the patient info in the HTML
+          document.getElementById('first_name').textContent = patient.first_name;
+          document.getElementById('last_name').textContent = patient.last_name;
+          document.getElementById('birthdate').textContent = `Birthdate: ${patient.birthdate}`;
+          document.getElementById('diagnosis').textContent = `Diagnosis: ${patient.diagnosis}`;
+          document.getElementById('prognosis').textContent = `Prognosis: ${patient.prognosis}`;
+          document.getElementById('age').textContent = `Age: ${age}`; // Set the age in the HTML (id called age)
+          document.getElementById('sex').textContent = `Sex: ${patient.sex}`;
+          document.getElementById('patient_id').textContent = `Patient id: ${patient['_id']}`;
+
+          // Modify the content of deathwishes with id deathwishes-list
+          const deathwishesList = document.getElementById('deathwishes-list');
+          deathwishesList.innerHTML = patient.wish;
+    })
+    });
+    
+    // Add an event listener to the email button 
+    document.getElementById('email-button').addEventListener('click', () => {
+      // Get the patient ID from the URL
+        const patientId = new URLSearchParams(window.location.search).get('patientId');
+        
+        fetch(`http://localhost:80/patients/${patientId}/notify-relatives`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(function(response) {
+          alert('Email sent to relative');
+        }).catch(function(response) {
+          alert('No relatives to notify');
+        });
+    });
+    
+  
+    // Calculate the age for the specific page from the birthdate and the current date
+    function calculateAge(birthdate) {
+      const age = new Date().getFullYear() - birthdate.getFullYear();
+      // Set the age in the HTML (id called age)
+      return age;
+    }</script>
 </body>
 </html>
