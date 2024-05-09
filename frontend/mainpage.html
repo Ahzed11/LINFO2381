@@ -175,65 +175,55 @@
     
 
     <script>
-        // Données fictives des patients
-        var patients = [
-        {
-            "first_name": "Jane",
-            "last_name": "Smith",
-            "picture": "profile.jpg",
-            "age": 35,
-            "sex": "female",
-            "relatives": [
-              {"first_name": "David", "last_name": "Smith", "relation": "spouse", "email": "david.smith@example.com", "phone_number": "1234567890"},
-              {"first_name": "Emily", "last_name": "Smith", "relation": "child", "email": "emily.smith@example.com", "phone_number": "9876543210"}
-            ],
-            "diagnosis": "Colon cancer",
-            "prognosis": "8 months",
-            "wish": "To travel the world"
-          },
-          {
-            "first_name": "John",
-            "last_name": "Doe",
-            "picture": "",
-            "age": 45,
-            "sex": "male",
-            "relatives": [
-              {"first_name": "didier", "last_name": "raoult", "relation": "parent", "email": "dr@gmail.com", "phone_number": "0462283826"}
-            ],
-            "diagnosis": "Cancer in brain",
-            "prognosis": "3 months to live",
-            "wish": "string"
-          },
-            {
-                "first_name": "Michael",
-                "last_name": "Johnson",
-                "picture": "profile.png",
-                "age": 55,
-                "sex": "male",
-                "relatives": [
-                  {"first_name": "Sarah", "last_name": "Johnson", "relation": "spouse", "email": "sarah.johnson@example.com", "phone_number": "1234567890"},
-                  {"first_name": "Jacob", "last_name": "Johnson", "relation": "child", "email": "jacob.johnson@example.com", "phone_number": "9876543210"}
-                ],
-                "diagnosis": "Heart cancer",
-                "prognosis": "2 days",
-                "wish": "To spend time with family"
-              }
-        ];
+        let patients = []; // Instanciation d'un tableau vide pour stocker les patients. Let est utilisé pour déclarer une variable locale dans une fonction.
+
+        
+        // DOMContentLoaded is the event that fires when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.
+        document.addEventListener("DOMContentLoaded", () => { 
+            console.log("Hello World!");
+            
+        fetch('http://localhost/patients/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+                patients = data;
+                loadPatients();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An error occurred while fetching the patients');
+            });
+        });
+        
 
         // Fonction pour charger les patients dans le tableau HTML
         function loadPatients() {
             var table = document.getElementById('patientsTable').getElementsByTagName('tbody')[0];
             patients.forEach(function(patient) {
+
+                // Calculate the age of the patient
+                const age = calculateAge(new Date(patient.birthdate));
+
                 var row = table.insertRow();
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
                 var cell3 = row.insertCell(2);
                 var cell4 = row.insertCell(3);
                 cell1.textContent = patient.first_name + ' ' + patient.last_name;
-                cell2.textContent = patient.age;
+                cell2.textContent = age;
                 cell3.textContent = patient.sex;
-                cell4.innerHTML = '<a href="specificpage.html?patientId=' + patient.id + '">See more</a>'; // 4th cell is the see more link to the specific page
+                cell4.innerHTML = '<a href="specificpage.html?patientId=' + patient["_id"] + '">See more</a>'; // 4th cell is the see more link to the specific page
             });
+        }
+        
+        function calculateAge(birthdate) {
+            const age = new Date().getFullYear() - birthdate.getFullYear();
+            // Set the age in the HTML (id called age)
+            return age;
         }
 
         function filterPatients() {
