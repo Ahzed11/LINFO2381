@@ -7,6 +7,7 @@ from .libs.CouchDBClient import CouchDBClient
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
 import os
+import json
 
 #region CONSTANTS
 PATIENTS_DB = "patients"
@@ -60,6 +61,21 @@ async def startup_event():
         couchdb_client.createDatabase(PATIENTS_DB)
 
         # TODO: Insert patients from PatientModels
+        # Load all three patiens from the PatientModels
+        # Insert them into the database
+        
+        # JSON Path to the file
+        path = os.path.join(os.path.dirname(__file__), "PatientModels")
+        
+        # List dir
+        files = os.listdir(path)
+        
+        # Iterate over the files
+        for file in files:
+            with open(os.path.join(path, file), "r") as f:
+                patient_as_json = json.load(f)
+                key = couchdb_client.addDocument(PATIENTS_DB, patient_as_json)
+                print("Added patient to couchdb with key: ", key)
     except Exception:
         pass
 #endregion
