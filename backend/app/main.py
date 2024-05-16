@@ -144,7 +144,7 @@ def send_email(recipient_email: str, death_wish: str):
     message = MIMEMultipart()
     message['From'] = sender_email
     message['To'] = recipient_email
-    message['Subject'] = 'Notification of Death Wish Submission'
+    message['Subject'] = 'Notification of Last Wish Submission'
 
     message_body = f"Hello,\n This is the wish of your relative: {death_wish} \n Have a nice day !"
     message.attach(MIMEText(message_body, 'plain'))
