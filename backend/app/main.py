@@ -101,10 +101,12 @@ async def notify_relatives(patient_id: str) -> Message:
         raise HTTPException(status_code=404, detail="Patient does not exist")
 
     wish = patient.wish
+    patient_name = f"{patient.first_name} {patient.last_name}"
     for relative in patient.relatives:
+        recipient_name = f"{relative.first_name} {relative.last_name}"
         email = relative.email
         
-        result = send_email(email, wish)
+        result = send_email(recipient_email=email, recipient_name=recipient_name, dead_name=patient_name, death_wish=wish)
         if not result:
             raise HTTPException(status_code=500, detail="Email could not be sent.")
         
@@ -138,7 +140,7 @@ async def update_patient(patient: PatientFromDB):
 
 #region utils
 
-def send_email(recipient_email: str, death_wish: str):
+def send_email(recipient_email: str, recipient_name: str, dead_name: str, death_wish: str):
     sender_email = "test"
 
     message = MIMEMultipart()
@@ -146,7 +148,16 @@ def send_email(recipient_email: str, death_wish: str):
     message['To'] = recipient_email
     message['Subject'] = 'Notification of Last Wish Submission'
 
-    message_body = f"Hello,\n This is the wish of your relative: {death_wish} \n Have a nice day !"
+    message_body = f"""Dearest {recipient_name},
+It is with a heavy heart that we convey the final wishes of {dead_name}:
+
+"{death_wish}"
+
+May their memory be a blessing.
+
+With deepest sympathies,
+The beyond wishes team
+    """
     message.attach(MIMEText(message_body, 'plain'))
 
     try:
