@@ -74,7 +74,7 @@
                     <hr id="separator" />
 
                     <div id="relativesContainer">
-                        <!-- Relative fields will be dynamically added here -->
+                        <!-- Relative fields will be added here -->
                     </div>
 
 
@@ -100,9 +100,8 @@
             let thePatient = {};
             let relativeIndex = 0;
 
-            document.addEventListener("DOMContentLoaded", () => { // DOMContentLoaded is the event that fires when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.
+            document.addEventListener("DOMContentLoaded", () => {
 
-                // Fetch the patient data from the API
                 fetch(`http://localhost:80/patients/${patientId}`)
                     .then(response => response.json())
                     .then(patient => {

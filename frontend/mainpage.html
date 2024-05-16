@@ -41,7 +41,6 @@
 
                 <button id="openFilterModal" class="btn btn-primary col-3">Filter Patients</button>
 
-                <!-- Modal for filters -->
                 <div id="filterModal" class="modal">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -77,7 +76,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Table rows will be added by JavaScript -->
+                        <!-- Table rows will be added here -->
                     </tbody>
                 </table>
 
@@ -105,7 +104,7 @@
         }
 
 
-        // DOMContentLoaded is the event that fires when the initial HTML document has been completely loaded and parsed.
+        // When page is loaded
         document.addEventListener("DOMContentLoaded", () => {
             fetch('http://localhost/patients/', {
                 method: 'GET',
@@ -123,13 +122,10 @@
                 });
         });
 
-
-        // Fonction pour charger les patients dans le tableau HTML
         function loadPatients() {
             const table = document.getElementById('patientsTable').getElementsByTagName('tbody')[0];
             patients.forEach(function (patient) {
 
-                // Calculate the age of the patient
                 const age = calculateAge(new Date(patient.birthdate));
 
                 const row = table.insertRow();
@@ -146,17 +142,16 @@
 
         function calculateAge(birthdate) {
             const age = new Date().getFullYear() - birthdate.getFullYear();
-            // Set the age in the HTML (id called age)
             return age;
         }
 
         function resetFilters() {
-            document.getElementById('filterSex').value = ""; // Remet le sexe à 'Any Sex'
-            document.getElementById('minAge').value = "";   // Efface le champ âge minimum
-            document.getElementById('maxAge').value = "";   // Efface le champ âge maximum
+            document.getElementById('filterSex').value = "";
+            document.getElementById('minAge').value = "";
+            document.getElementById('maxAge').value = "";
 
-            filterPatients(); // Applique les filtres réinitialisés pour mettre à jour l'affichage
-            closeModal();     // Ferme le modal après la réinitialisation
+            filterPatients();
+            closeModal();
         }
 
         function filterPatients() {

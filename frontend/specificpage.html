@@ -117,14 +117,10 @@
     </section>
 
     <script>
-        // Get the patient ID from the URL
         const urlParams = new URLSearchParams(window.location.search);
-        // Get the param : "patientId"
         const patientId = urlParams.get('patientId');
 
-        document.addEventListener("DOMContentLoaded", () => { // DOMContentLoaded is the event that fires when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.
-
-            // Fetch the patient data from the API
+        document.addEventListener("DOMContentLoaded", () => {
             fetch(`http://localhost:80/patients/${patientId}`)
                 .then(response => response.json())
                 .then(patient => {
@@ -132,19 +128,16 @@
 
                     const fullname = `${patient.first_name} ${patient.last_name}`
 
-                    // Calculate the age of the patient
                     var age = calculateAge(new Date(patient.birthdate));
 
-                    // Set the patient info in the HTML
                     document.getElementById('fullname').textContent = fullname;
                     document.getElementById('birthdate').textContent = patient.birthdate;
                     document.getElementById('diagnosis').textContent = patient.diagnosis;
                     document.getElementById('prognosis').textContent = patient.prognosis;
-                    document.getElementById('age').textContent = age; // Set the age in the HTML (id called age)
+                    document.getElementById('age').textContent = age;
                     document.getElementById('sex').textContent = patient.sex;
                     document.getElementById('patient_id').textContent = patient['_id'];
 
-                    // Modify the content of deathwishes with id deathwishes-list
                     const deathwishesList = document.getElementById('deathwishes-list');
                     deathwishesList.innerHTML = patient.wish;
 
@@ -167,7 +160,6 @@
                 })
         });
 
-        // Add an event listener to the email button 
         document.getElementById('email-button').addEventListener('click', () => {
             fetch(`http://localhost:80/patients/${patientId}/notify-relatives`, {
                 method: 'POST',
@@ -181,10 +173,8 @@
             });
         });
 
-        // Calculate the age for the specific page from the birthdate and the current date
         function calculateAge(birthdate) {
             const age = new Date().getFullYear() - birthdate.getFullYear();
-            // Set the age in the HTML (id called age)
             return age;
         }</script>
 </body>
